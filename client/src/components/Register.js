@@ -1,3 +1,5 @@
+// src/components/Register.js
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import avatar from '../assets/profile.png';
@@ -23,17 +25,23 @@ export default function Register() {
     validateOnBlur: false,
     validateOnChange: false,
     onSubmit: async (values) => {
-      // Attach the profile image to form values
-      values = await Object.assign(values, { profile: file || '' });
-      const registerPromise = registerUser(values);
+      values = Object.assign(values, { profile: file || '' });
 
-      toast.promise(registerPromise, {
-        loading: 'Creating...',
-        success: <b>Registered Successfully!</b>,
-        error: <b>Could not Register.</b>,
-      });
+      try {
+        const registerPromise = registerUser(values);
 
-      registerPromise.then(() => navigate('/'));
+        toast.promise(registerPromise, {
+          loading: 'Creating...',
+          success: <b>Registered Successfully!</b>,
+          error: <b>Could not Register. Please try again.</b>,
+        });
+
+        await registerPromise;
+        navigate('/');
+      } catch (error) {
+        console.error('Registration Error:', error.response?.data || error.message || error);
+        // toast.error(error.response?.data?.message || 'Something went wrong.');
+      }
     },
   });
 

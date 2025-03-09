@@ -13,7 +13,7 @@ export default function Recovery() {
 
   useEffect(() => {
     generateOTP(username).then((OTP) => {
-      console.log(OTP)
+      // console.log(OTP)
       if(OTP) return toast.success('OTP has been send to your email!');
       return toast.error('Problem while generating OTP!')
     })
@@ -46,7 +46,7 @@ export default function Recovery() {
     );
 
     sentPromise.then((OTP) => {
-      console.log(OTP)
+      // console.log(OTP)
     });
     
   }
